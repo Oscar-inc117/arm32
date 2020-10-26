@@ -1,27 +1,26 @@
 # ARM32
 
-# Ejemplos ejercicios C y Assembly
-
 ## C
 ```c
 #include <stdio.h>
 
 int main(){
-    for (int i = 1950; i<2015; i++){
-	switch(i&3){
-	    case 0: printf("En %d hubo olimpiadas\n", i);
-	             break;
-	    case 2: printf("En %d hubo mundial de futbol\n", i);
-	            break;
-	    default: printf("En %d no paso nada\n", i);
-	}
+	for (int i = 0; i < 10; i++){
+		if(i&1)
+	    	printf("%d es impar\n", i);
+		else
+	    	printf("%d es par\n", i);
     }
-    return 0;
+	return 0;
 }
-
 ```
 
-# Assembly
+```bash
+#Convert to assembly
+pi@raspberrypi:~/arm32 $ g++ -S evodd.c
+```
+
+## Assembly
 ```assembly
 	.arch armv6
 	.eabi_attribute 28, 1
@@ -34,18 +33,15 @@ int main(){
 	.eabi_attribute 30, 6
 	.eabi_attribute 34, 1
 	.eabi_attribute 18, 4
-	.file	"switch.c"
+	.file	"evodd.c"
 	.text
 	.section	.rodata
 	.align	2
 .LC0:
-	.ascii	"En %d hubo olimpiadas\012\000"
+	.ascii	"%d es impar\012\000"
 	.align	2
 .LC1:
-	.ascii	"En %d hubo mundial de futbol\012\000"
-	.align	2
-.LC2:
-	.ascii	"En %d no paso nada\012\000"
+	.ascii	"%d es par\012\000"
 	.text
 	.align	2
 	.global	main
@@ -65,55 +61,58 @@ main:
 	add	fp, sp, #4
 	.pad #8
 	sub	sp, sp, #8
-	ldr	r3, .L10
+	mov	r3, #0
 	str	r3, [fp, #-8]
-.L7:
+.L5:
 	ldr	r3, [fp, #-8]
-	ldr	r2, .L10+4
-	cmp	r3, r2
+	cmp	r3, #9
 	bgt	.L2
 	ldr	r3, [fp, #-8]
-	and	r3, r3, #3
+	and	r3, r3, #1
 	cmp	r3, #0
 	beq	.L3
-	cmp	r3, #2
-	beq	.L4
-	b	.L9
+	ldr	r1, [fp, #-8]
+	ldr	r0, .L7
+	bl	printf
+	b	.L4
 .L3:
 	ldr	r1, [fp, #-8]
-	ldr	r0, .L10+8
+	ldr	r0, .L7+4
 	bl	printf
-	b	.L6
 .L4:
-	ldr	r1, [fp, #-8]
-	ldr	r0, .L10+12
-	bl	printf
-	b	.L6
-.L9:
-	ldr	r1, [fp, #-8]
-	ldr	r0, .L10+16
-	bl	printf
-.L6:
 	ldr	r3, [fp, #-8]
 	add	r3, r3, #1
 	str	r3, [fp, #-8]
-	b	.L7
+	b	.L5
 .L2:
 	mov	r3, #0
 	mov	r0, r3
 	sub	sp, fp, #4
 	@ sp needed
 	pop	{fp, pc}
-.L11:
+.L8:
 	.align	2
-.L10:
-	.word	1950
-	.word	2014
+.L7:
 	.word	.LC0
 	.word	.LC1
-	.word	.LC2
 	.fnend
 	.size	main, .-main
 	.ident	"GCC: (Raspbian 8.3.0-6+rpi1) 8.3.0"
 	.section	.note.GNU-stack,"",%progbits
+```
+
+### Output
+```bash
+pi@raspberrypi:~/arm32 $ gcc -g evodd.s -o evodd -mbe32
+pi@raspberrypi:~/arm32 $ ./evodd
+0 es par
+1 es impar
+2 es par
+3 es impar
+4 es par
+5 es impar
+6 es par
+7 es impar
+8 es par
+9 es impar
 ```

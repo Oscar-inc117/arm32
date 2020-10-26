@@ -1,5 +1,5 @@
-;Programador: Oscar Dominguez
-;Fecha: 10/23/2020
+@Programador: Oscar Dominguez
+@Fecha: 10/23/2020
 .data
 
 var1:   .word   0x80000000

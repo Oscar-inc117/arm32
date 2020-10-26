@@ -1,3 +1,9 @@
+/*
+*	2.3 Even/odd
+*	Author: Oscar Dominguez
+*	Date: 10/23/2020
+*/
+
 #include <stdio.h>
 
 int main(){

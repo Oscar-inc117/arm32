@@ -1,8 +1,8 @@
-@2.3 Even/odd
+@2.2 if
 @Author: Oscar Dominguez
 @Date: 10/23/2020	
-	
-	.arch armv6
+
+    .arch armv6
 	.eabi_attribute 28, 1
 	.eabi_attribute 20, 1
 	.eabi_attribute 21, 1
@@ -13,15 +13,12 @@
 	.eabi_attribute 30, 6
 	.eabi_attribute 34, 1
 	.eabi_attribute 18, 4
-	.file	"evodd.c"
+	.file	"if.c"
 	.text
 	.section	.rodata
 	.align	2
 .LC0:
-	.ascii	"%d es impar\012\000"
-	.align	2
-.LC1:
-	.ascii	"%d es par\012\000"
+	.ascii	"yes\000"
 	.text
 	.align	2
 	.global	main
@@ -41,40 +38,23 @@ main:
 	add	fp, sp, #4
 	.pad #8
 	sub	sp, sp, #8
-	mov	r3, #0
+	mov	r3, #5
 	str	r3, [fp, #-8]
-.L5:
 	ldr	r3, [fp, #-8]
-	cmp	r3, #9
-	bgt	.L2
-	ldr	r3, [fp, #-8]
-	and	r3, r3, #1
-	cmp	r3, #0
-	beq	.L3
-	ldr	r1, [fp, #-8]
-	ldr	r0, .L7
-	bl	printf
-	b	.L4
-.L3:
-	ldr	r1, [fp, #-8]
-	ldr	r0, .L7+4
-	bl	printf
-.L4:
-	ldr	r3, [fp, #-8]
-	add	r3, r3, #1
-	str	r3, [fp, #-8]
-	b	.L5
+	cmp	r3, #5
+	bne	.L2
+	ldr	r0, .L4
+	bl	puts
 .L2:
 	mov	r3, #0
 	mov	r0, r3
 	sub	sp, fp, #4
 	@ sp needed
 	pop	{fp, pc}
-.L8:
+.L5:
 	.align	2
-.L7:
+.L4:
 	.word	.LC0
-	.word	.LC1
 	.fnend
 	.size	main, .-main
 	.ident	"GCC: (Raspbian 8.3.0-6+rpi1) 8.3.0"

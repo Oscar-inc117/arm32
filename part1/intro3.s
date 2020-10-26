@@ -1,5 +1,6 @@
-;Programador: Oscar Dominguez
-;Fecha: 10/23/2020
+@Programador: Oscar Dominguez
+@Fecha: 10/23/2020
+
 .text
 .global main
 

@@ -1,3 +1,9 @@
+/*
+*	2.1 First 50 even numbers
+*	Author: Oscar Dominguez
+*	Date: 10/23/2020
+*/
+
 #include <stdio.h>
 
 int main(){
