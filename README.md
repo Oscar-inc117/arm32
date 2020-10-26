@@ -1,26 +1,45 @@
 # ARM32
+Ejercicios ebook OpenSource
 
-## C
+# Instalar gcc multilib de ser necesario
+Si al compilar codigo c a assembly con el comando siguiente y al tratar de correr el archivo .s marca error:
+```bash
+$ gcc -Os -S -o evodd.s evodd.c
+$ as -o evodd.o evodd.s
+$ ld -o evodd  evodd.o
+$ ./evodd
+```
+
+Instalar gcc multilib para poder compilar correctamente a 32-bit:
+```bash
+sudo apt-get install gcc-multilib g++-multilib
+```
+
+# Ejemplo codigo C y Assembly
+
+![](images/c.png) 
+
 ```c
 #include <stdio.h>
 
 int main(){
-	for (int i = 0; i < 10; i++){
-		if(i&1)
-	    	printf("%d es impar\n", i);
-		else
-	    	printf("%d es par\n", i);
+    for (int i = 0; i < 10; i++){
+        if(i&1)
+	        printf("%d es impar\n", i);
+        else
+	        printf("%d es par\n", i);
     }
-	return 0;
+    return 0;
 }
 ```
 
 ```bash
-#Convert to assembly
+#Convertir a assembly
 pi@raspberrypi:~/arm32 $ g++ -S evodd.c
 ```
 
-## Assembly
+![](images/asm.png)
+
 ```assembly
 	.arch armv6
 	.eabi_attribute 28, 1
@@ -101,8 +120,9 @@ main:
 	.section	.note.GNU-stack,"",%progbits
 ```
 
-### Output
+# Output
 ```bash
+#construir binarios 32-bit
 pi@raspberrypi:~/arm32 $ gcc -g evodd.s -o evodd -mbe32
 pi@raspberrypi:~/arm32 $ ./evodd
 0 es par
